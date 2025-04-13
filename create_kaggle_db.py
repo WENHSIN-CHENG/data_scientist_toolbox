@@ -1,3 +1,4 @@
+## import 模組
 import pandas as pd
 import string
 import sqlite3
