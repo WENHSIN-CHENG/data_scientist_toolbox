@@ -10,17 +10,17 @@ class CreateKaggleSurveyDB:
         df_dict = dict()
         for survey_year in survey_years:
             file_path = f"data/kaggle_survey_{survey_year}_responses.csv"
-            df = pd.read_csv(file_path, low_memory=False, skiprows=[1])
-            df = df.iloc[:, 1:]
+            df = pd.read_csv(file_path, low_memory=False, skiprows=[1])  ##不讀取題目
+            df = df.iloc[:, 1:] ##第0欄位是時間,不需要
             df_dict[survey_year, "responses"] = df
-            df = pd.read_csv(file_path, nrows=1)
+            df = pd.read_csv(file_path, nrows=1) ##只讀取題目
             question_descriptions = df.values.ravel()
-            question_descriptions = question_descriptions[1:]
+            question_descriptions = question_descriptions[1:] ##第0欄位是時間,不需要
             df_dict[survey_year, "question_descriptions"] = question_descriptions
         self.survey_years = survey_years
         self.df_dinct = df_dict
     def tidy_2020_2021_data(self, survey_year: int) -> tuple:
-##將資料進行分割成兩個區塊-第一塊
+##將資料進行分割成兩個區塊-第一塊,由於2020,2021年題目的命名邏輯相同,2022年題目邏輯不同
         question_indexes, question_types, question_descriptions = [], [], []
         column_names = self.df_dinct[survey_year, "responses"].columns
         descriptions = self.df_dinct[survey_year, "question_descriptions"]
